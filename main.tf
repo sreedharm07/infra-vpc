@@ -24,7 +24,7 @@ resource "aws_route" "igw" {
 
   route_table_id         = each.value["id"]
   destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = element(aws_internet_gateway.igw.*.id,count.index)
+  gateway_id             = aws_internet_gateway.igw.id
 }
 
 resource "aws_eip" "lb" {
