@@ -20,6 +20,6 @@ resource "aws_route_table" "example" {
 
 resource "aws_route_table_association" "a" {
   for_each = var.subnets
-  subnet_id      = aws_subnet.main[each.value].id
-  route_table_id = aws_route_table.example[each.value].id
+  subnet_id      = aws_subnet.main[each.key].id
+  route_table_id = aws_route_table.example[each.key].id
 }
