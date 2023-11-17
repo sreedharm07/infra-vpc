@@ -20,7 +20,7 @@ resource "aws_internet_gateway" "igw" {
 }
 
 resource "aws_route" "route" {
-  for_each = lookup(lookup(lookup(module.subnets, null), "public", null), "route_table_ids", null)
+  for_each = lookup(lookup(module.subnets,"public", null),"route_table_ids", null)
 
   route_table_id         = each.value["id"]
   destination_cidr_block = "0.0.0.0/0"
