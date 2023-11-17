@@ -19,7 +19,7 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
-resource "aws_route" "route" {
+resource "aws_route" "igw" {
   for_each = lookup(lookup(module.subnets, "public", null), "route_table_ids", null)
 
   route_table_id         = each.value["id"]
@@ -43,7 +43,7 @@ resource "aws_nat_gateway" "ngw" {
   }
 }
 
-resource "aws_route" "route" {
+resource "aws_route" "ngw" {
   count = length(local.private_subnet_ids)
 
   route_table_id         = element(local.private_subnet_ids,count.index )
