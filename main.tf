@@ -38,6 +38,6 @@ resource "aws_nat_gateway" "example" {
   subnet_id = each.value["id"]
 
   tags = {
-    Name = "gw NAT"
+    Name = each.key
   }
 }
