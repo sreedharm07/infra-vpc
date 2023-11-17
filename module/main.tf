@@ -17,3 +17,9 @@ resource "aws_route_table" "example" {
     Name =  "${each.key}-route"
   }
 }
+
+resource "aws_route_table_association" "a" {
+  for_each = var.subnets
+  subnet_id      = aws_subnet.main.id
+  route_table_id = aws_route_table.example.id
+}
