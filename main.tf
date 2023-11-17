@@ -28,13 +28,14 @@ resource "aws_route" "route" {
 }
 
 resource "aws_eip" "lb" {
+  for_each = lookup(lookup(module.subnets, "public", null), "route_table_ids", null)
   domain   = "vpc"
 }
 
 resource "aws_nat_gateway" "example" {
   for_each      = lookup(lookup(module.subnets, "public", null), "subnets", null)
 
-  allocation_id = aws_eip.lb.id
+  allocation_id = aws_eip.lb[each.value].id
   subnet_id = each.value["id"]
 
   tags = {
