@@ -18,8 +18,12 @@ resource "aws_route_table" "example" {
   }
 }
 
-resource "aws_route_table_association" "a" {
-  for_each = var.subnets
-  subnet_id      = lookup(lookup(aws_subnet.main,each.value, null ), "id" , null)
-  route_table_id =  lookup(lookup(aws_route_table.example,each.value, null ), "id" , null)
+#resource "aws_route_table_association" "a" {
+#  for_each = var.subnets
+#  subnet_id      = lookup(lookup(aws_subnet.main,each.key, null ), "id" , null)
+#  route_table_id =  lookup(lookup(aws_route_table.example,each.key, null ), "id" , null)
+#}
+
+output "output" {
+  value = aws_subnet.main
 }
