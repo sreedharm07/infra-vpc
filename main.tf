@@ -35,7 +35,7 @@ resource "aws_eip" "lb" {
 resource "aws_nat_gateway" "ngw" {
   count      = length(local.public_subnet_ids)
 
-  allocation_id = element(aws_eip.lb.*.id, count.index )
+  allocation_id = element(aws_eip.lb.id, count.index )
   subnet_id = element(local.public_subnet_ids, count.index )
 
   tags = {
@@ -48,5 +48,5 @@ resource "aws_route" "ngw" {
 
   route_table_id         = element(local.private_subnet_ids,count.index )
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id             = element(aws_nat_gateway.ngw.*.id,count.index )
+  nat_gateway_id             = element(aws_nat_gateway.ngw.id,count.index )
 }
