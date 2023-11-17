@@ -24,7 +24,7 @@ resource "aws_route" "igw" {
 
   route_table_id         = each.value["id"]
   destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_internet_gateway.igw.id
+  gateway_id             = element(aws_internet_gateway.igw.id,count.index)
 }
 
 resource "aws_eip" "lb" {
@@ -35,8 +35,8 @@ resource "aws_eip" "lb" {
 resource "aws_nat_gateway" "ngw" {
   count      = length(local.public_subnet_ids)
 
-  allocation_id = element(aws_eip.lb.id,count.index )
-  subnet_id = element(local.public_subnet_ids,count.index )
+  allocation_id = element(aws_eip.lb.id, count.index )
+  subnet_id = element(local.public_subnet_ids, count.index )
 
   tags = {
     Name = "ngw"
