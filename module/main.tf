@@ -10,7 +10,7 @@ resource "aws_subnet" "main" {
   }
 }
 
-resource "aws_route_table" "example" {
+resource "aws_route_table" "main" {
   vpc_id   = var.vpc_id
   for_each = var.subnets
   tags     = {
@@ -21,5 +21,13 @@ resource "aws_route_table" "example" {
 resource "aws_route_table_association" "a" {
   for_each = var.subnets
   subnet_id      = aws_subnet.main[each.key].id
-  route_table_id = aws_route_table.example[each.key].id
+  route_table_id = aws_route_table.main[each.key].id
+}
+
+
+output "subnets" {
+  value = aws_subnet.main
+}
+output "route_table_ids" {
+  value = aws_route_table.main
 }

@@ -12,6 +12,6 @@ module "subnets" {
 }
 
 
-output "output" {
+output "subnets" {
   value = module.subnets
 }
