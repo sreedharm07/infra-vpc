@@ -68,3 +68,9 @@ resource "aws_route" "peering" {
   destination_cidr_block    = var.default_cidr_block
   vpc_peering_connection_id = element(aws_vpc_peering_connection.main.*.id,count.index )
 }
+
+resource "aws_route" "default_peer" {
+  route_table_id            = var.default_route_table_id
+  destination_cidr_block    = var.cidr
+  vpc_peering_connection_id = aws_vpc_peering_connection.main.id
+}
