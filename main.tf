@@ -1,22 +1,23 @@
 resource "aws_vpc" "main" {
   cidr_block = var.cidr
+  tags       = merge(local.tags, {Name = "${var.env}-vpc"})
 }
 
 
 module "subnets" {
-  source     = "./module"
+  source   = "./module"
   for_each = var.subnets
 
-  subnets    = each.value
-  vpc_id     = aws_vpc.main.id
+  subnets = each.value
+  vpc_id  = aws_vpc.main.id
+  tags    = local.tags
+  env     = var.env
 }
 
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
 
-  tags = {
-    Name = "igw"
-  }
+  tags = merge(local.tags , {Name = "${var.env}-igw"})
 }
 
 resource "aws_route" "igw" {
@@ -38,9 +39,7 @@ resource "aws_nat_gateway" "ngw" {
   allocation_id = element(aws_eip.lb.*.id, count.index )
   subnet_id = element(local.public_subnet_ids, count.index )
 
-  tags = {
-    Name = "ngw"
-  }
+  tags = merge(local.tags, {Name = "${var.env}-igw"})
 }
 
 resource "aws_route" "ngw" {
@@ -56,9 +55,7 @@ resource "aws_vpc_peering_connection" "main" {
   vpc_id      = var.default_vpcid
   auto_accept   = true
 
-  tags = {
-    Name = "vpc peering"
-  }
+  tags = merge(local.tags,{Name= "${var.env}-peering"})
 }
 
 resource "aws_route" "peering" {
